@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<lucene-test-config>
+<params>
+<!-- input folder which contain the text files to be indexed-->
+<input_dir>C:\indexdata\input\512kb</input_dir>
+<!-- wikipedia line file-->
+<input_file>C:\indexdata\input\1gb\small-aa</input_file>
+<!-- output folder which contain final and temp indexes-->
+<output_dir>c:\indexdata\output-lucene-multi</output_dir>
+<!-- set it to 1 to use ramdir for interim indexes else set it to 0 -->
+<use_ramdir>1</use_ramdir>
+<!-- ram buffer the indexwriter will use before flushing-->
+<ram_buffer_size_mb>200</ram_buffer_size_mb>
+<!-- set it to 1 to use no merge policy-->
+<no_merge_policy>0</no_merge_policy>
+<!-- note that this applies only for indep scheme-->
+<!-- set it to 0 to decide automatically-->
+<!-- set it to -1 to not close indexes early-->
+<!-- set it to xxx e.g. 56000 to not let index grew bigger than 56000 bytes-->
+<index_close_threshhold>40000000</index_close_threshhold>  
+<!-- "base" : to have multiple writers calling addDocument on the one main index-->
+<!-- "multi" : to have multiple writers calling addDocument to their own index and then calling addIndexes on main index-->
+<!-- "indep" : to have multiple independent writers-->
+<index_scheme>base</index_scheme>
+</params>
+</lucene-test-config>

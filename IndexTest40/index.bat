@@ -1,0 +1,1 @@
+java -Xmx8g -Xms8g -server -jar IndexTest40.jar %*

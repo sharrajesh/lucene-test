@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/lucene-4.3.1-svn/build/core/lucene-core-4.3.1-SNAPSHOT.jar" sourcepath="C:/ad/work/java-downloads/lucene-4.3.1-svn/core/src">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/lucene-4.3.1-svn/build/core/lucene-core-4.3.1-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/commons-configuration-1.9-bin/commons-configuration-1.9/commons-configuration-1.9.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/commons-configuration-1.9-bin/commons-configuration-1.9/commons-configuration-1.9-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/java-downloads/commons-configuration-1.9-bin/commons-configuration-1.9/commons-configuration-1.9-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/java-downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/commons-logging-1.1.3-bin/commons-logging-1.1.3/commons-logging-1.1.3.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/commons-logging-1.1.3-bin/commons-logging-1.1.3/commons-logging-1.1.3-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/java-downloads/commons-logging-1.1.3-bin/commons-logging-1.1.3/commons-logging-1.1.3-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/lucene-4.3.1-svn/build/analysis/common/lucene-analyzers-common-4.3.1-SNAPSHOT.jar" sourcepath="C:/ad/work/java-downloads/lucene-4.3.1-svn/analysis/common/src">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/lucene-4.3.1-svn/build/analysis/common/lucene-analyzers-common-4.3.1-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/lucene-4.3.1-svn/build/queryparser/lucene-queryparser-4.3.1-SNAPSHOT.jar" sourcepath="C:/ad/work/java-downloads/lucene-4.3.1-svn/queryparser/src">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/lucene-4.3.1-svn/build/queryparser/lucene-queryparser-4.3.1-SNAPSHOT-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/commons-lang-2.6-bin/commons-lang-2.6/commons-lang-2.6.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/commons-lang-2.6-bin/commons-lang-2.6/commons-lang-2.6-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:/ad/work/java-downloads/java-downloads/commons-lang-2.6-bin/commons-lang-2.6/commons-lang-2.6-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/slf4j-1.7.5/slf4j-1.7.5/slf4j-api-1.7.5.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/slf4j-1.7.5/slf4j-1.7.5/slf4j-api-1.7.5-sources.jar"/>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/logback-1.0.13/logback-1.0.13/logback-classic-1.0.13.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/logback-1.0.13/logback-1.0.13/logback-classic-1.0.13-sources.jar"/>
+	<classpathentry kind="lib" path="C:/ad/work/java-downloads/logback-1.0.13/logback-1.0.13/logback-core-1.0.13.jar" sourcepath="C:/ad/work/java-downloads/java-downloads/logback-1.0.13/logback-1.0.13/logback-core-1.0.13-sources.jar"/>
+	<classpathentry kind="var" path="JAVA_DOWNLOADS"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
