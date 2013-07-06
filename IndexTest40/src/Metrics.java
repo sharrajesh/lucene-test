@@ -4,7 +4,11 @@ import java.text.DecimalFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
+import org.apache.lucene.index.SlowCompositeReaderWrapper;
+import org.apache.lucene.index.Terms;
+import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +34,29 @@ public class Metrics {
       
       Watch.Reset();
       Watch.Start();
+
+      long totalTermsWithDuplicates = 0;
+      long totalTermsWithoutDuplicates = 0;
       
-      long uniqueWords = 0;
+      Fields fields = SlowCompositeReaderWrapper.wrap(reader).fields();
       
-//      Fields fields = reader.getTermVectors(0);
-      uniqueWords = reader.getSumTotalTermFreq("body");
-//      for (int docId = 0; docId < reader.numDocs(); docId++) {
-//      	Fields fields = reader.getTermVectors(docId);
-//      	uniqueWords += fields.getUniqueTermCount();
-//      }
+      for (String field : fields) {
+        Log.info("\nTotal terms with duplicates for '" + field + "': " + reader.getSumTotalTermFreq(field));
+        totalTermsWithDuplicates += reader.getSumTotalTermFreq(field);
+        
+        Terms terms = SlowCompositeReaderWrapper.wrap(reader).terms(field);
+        long totalTermsWithoutDuplicatesForField = 0;
+        TermsEnum termsEnum = terms.iterator(null);
+        while (termsEnum.next() != null)
+        	totalTermsWithoutDuplicatesForField++;
+        	
+        Log.info("Total terms without duplicates for '" + field + "': " + totalTermsWithoutDuplicatesForField);
+        totalTermsWithoutDuplicates += totalTermsWithoutDuplicatesForField;
+      }
       
-      Log.info("Total number of documents: " + reader.numDocs());
-      Log.info("Total number of unique words: " + uniqueWords);
+      Log.info("\nTotal number of documents: " + reader.numDocs());
+      Log.info("Total terms with duplicates: " + totalTermsWithDuplicates);
+      Log.info("Total terms without duplicates: " + totalTermsWithoutDuplicates);
       Log.info("Total calculation took: " + Metrics.Watch.GetElapsed() + " millisecs");
       
       reader.close();

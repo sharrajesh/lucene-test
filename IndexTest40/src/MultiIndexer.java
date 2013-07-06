@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class MultiIndexer extends BaseIndexer {
@@ -18,8 +19,8 @@ public class MultiIndexer extends BaseIndexer {
   long InterimCloseThreshhold = 0;
   Random Rand = new Random();
 
-  MultiIndexer(IndexWriter mainIndexWriter) throws IOException {
-    super(mainIndexWriter);
+  MultiIndexer(IndexWriter mainIndexWriter, BufferedReader wikiReader, ArrayList<InputFileRec> listOfFilesToIndex) throws IOException {
+    super(mainIndexWriter, wikiReader, listOfFilesToIndex);
   }
   
   long GetNewCloseThreshhold() {

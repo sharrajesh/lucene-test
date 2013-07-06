@@ -85,6 +85,17 @@ public class IndexMain {
   }
   
   private void BuildIndex() throws Exception {
+    ArrayList<BaseIndexer.InputFileRec> listOfFilesToIndex = null;
+    BufferedReader wikiReader = null;
+
+    if (IndexConfig.UsingWikiLineFile())
+    	wikiReader = new BufferedReader(new FileReader(IndexConfig.WIKI_LINE_FILE));
+    else {
+    	listOfFilesToIndex = new ArrayList<BaseIndexer.InputFileRec>();
+      for(File file: IndexConfig.FILES_TO_INDEX) 
+      	listOfFilesToIndex.add(new BaseIndexer.InputFileRec(file, file.length()));
+    }
+	  
     Metrics.Watch.Start();
     
     IndexWriter mainIndexWriter = BaseIndexer.MakeIndexWriter(FSDirectory.open(new File(IndexConfig.Parsed.OUTPUT_DIR_FINAL)));
@@ -92,11 +103,11 @@ public class IndexMain {
     for (int i = 0; i < IndexConfig.MAX_THREADS; i++) {
       Thread t = null;
       if (IndexConfig.Parsed.Scheme == IndexConfig.IndexingScheme.Base)
-        t = new Thread(new BaseIndexer(mainIndexWriter));
+        t = new Thread(new BaseIndexer(mainIndexWriter, wikiReader, listOfFilesToIndex));
       else if (IndexConfig.Parsed.Scheme == IndexConfig.IndexingScheme.Multi)
-        t = new Thread(new MultiIndexer(mainIndexWriter));
+        t = new Thread(new MultiIndexer(mainIndexWriter, wikiReader, listOfFilesToIndex));
       else if (IndexConfig.Parsed.Scheme == IndexConfig.IndexingScheme.Indep)
-        t = new Thread(new IndepIndexer(mainIndexWriter));
+        t = new Thread(new IndepIndexer(mainIndexWriter, wikiReader, listOfFilesToIndex));
       else
       	throw new Exception("Invalid Indexing Scheme");
       t.start();

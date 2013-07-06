@@ -1,9 +1,12 @@
+import org.apache.commons.io.FileUtils;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.apache.lucene.document.FieldType;
 import org.apache.lucene.document.LongField;
 import org.apache.lucene.document.TextField;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.FieldInfo.IndexOptions;
 import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.index.NoMergePolicy;
@@ -28,7 +31,7 @@ public class BaseIndexer implements Runnable {
     String Body;
   };
 
-  class InputFileRec {
+  static public class InputFileRec {
 	  public File FileHandle;
 	  public long FileSize;
 	
@@ -44,19 +47,26 @@ public class BaseIndexer implements Runnable {
 
   IndexWriter MainIndexWriter;
   
-  BaseIndexer(IndexWriter mainIndexWriter) throws IOException {
+  BaseIndexer(IndexWriter mainIndexWriter, BufferedReader wikiReader, ArrayList<InputFileRec> listOfFilesToIndex) throws IOException {
     MainIndexWriter = mainIndexWriter;
-    BuildInput();
+    ListOfFilesToIndex = listOfFilesToIndex;
+    WikiReader = wikiReader;
+    CreateIndexableFieldType();
   }
-
-  void BuildInput() throws FileNotFoundException {
-    if (IndexConfig.UsingWikiLineFile())
-    	WikiReader = new BufferedReader(new FileReader(IndexConfig.WIKI_LINE_FILE));
-    else {
-    	ListOfFilesToIndex = new ArrayList<InputFileRec>();
-      for(File file: IndexConfig.FILES_TO_INDEX) 
-      	ListOfFilesToIndex.add(new InputFileRec(file, file.length()));
-    }
+  
+  private FieldType IndexableFieldType;
+  
+  void CreateIndexableFieldType() {
+  	IndexableFieldType = new FieldType();
+    
+  	IndexableFieldType.setStoreTermVectors(true);
+  	IndexableFieldType.setStoreTermVectorPositions(true);
+  	IndexableFieldType.setStoreTermVectorPayloads(true);
+    
+  	IndexableFieldType.setIndexed(true);
+  	IndexableFieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+    
+  	IndexableFieldType.setStored(true);    
   }
 
   protected static IndexWriterConfig MakeIndexWriterConfig() throws IOException {
@@ -133,7 +143,7 @@ public class BaseIndexer implements Runnable {
       
       doc.add(new TextField("title", TempDataRec.Title, Field.Store.YES));
       doc.add(new TextField("date", TempDataRec.Date, Field.Store.YES));
-      doc.add(new TextField("body", TempDataRec.Body, Field.Store.YES));
+      doc.add(new Field("body", TempDataRec.Body, IndexableFieldType));
 
       UpdateStats(TempDataRec.Body.length());
     }
@@ -150,7 +160,10 @@ public class BaseIndexer implements Runnable {
     Document doc = new Document();
     
     doc.add(new TextField("title", file.getPath(), Field.Store.YES));
-    doc.add(new TextField("body", new FileReader(file)));
+    
+    String body = FileUtils.readFileToString(file);
+    doc.add(new Field("body", body, IndexableFieldType));
+    //doc.add(new Field("body", new FileReader(file), IndexableFieldType));
     
     BasicFileAttributes attributes = Files.readAttributes(Paths.get(file.getPath()), BasicFileAttributes.class);
     doc.add(new LongField("date", attributes.creationTime().toMillis(), Field.Store.YES));

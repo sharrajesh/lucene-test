@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.ArrayList;
 
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.IndexWriter;
@@ -8,8 +9,8 @@ import org.apache.lucene.store.LockObtainFailedException;
 public class IndepIndexer extends MultiIndexer {
 	IndexWriter FileSystemBasedWriter = null;
 
-	IndepIndexer(IndexWriter mainIndexWriter) throws IOException {
-		super(mainIndexWriter);
+	IndepIndexer(IndexWriter mainIndexWriter, BufferedReader wikiReader, ArrayList<InputFileRec> listOfFilesToIndex) throws IOException {
+		super(mainIndexWriter, wikiReader, listOfFilesToIndex);
 	}
 
 	public void OpenInterimWriter() throws CorruptIndexException,

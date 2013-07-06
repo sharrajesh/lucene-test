@@ -4,15 +4,16 @@
 <!-- input folder which contain the text files to be indexed-->
 <input_dir>C:\indexdata\input\512kb</input_dir>
 <!-- wikipedia line file-->
-<input_file>C:\indexdata\input\1gb\small-aa</input_file>
+<input_file>C:\indexdata\input\orig\enwiki.txt</input_file>
+<!--<input_file>C:\indexdata\input\1gb\xaa</input_file>-->
 <!-- output folder which contain final and temp indexes-->
-<output_dir>c:\indexdata\output-lucene-multi</output_dir>
+<output_dir>d:\indexdata\output</output_dir>
 <!-- set it to 1 to use ramdir for interim indexes else set it to 0 -->
 <use_ramdir>1</use_ramdir>
 <!-- ram buffer the indexwriter will use before flushing-->
 <ram_buffer_size_mb>200</ram_buffer_size_mb>
 <!-- set it to 1 to use no merge policy-->
-<no_merge_policy>0</no_merge_policy>
+<no_merge_policy>1</no_merge_policy>
 <!-- note that this applies only for indep scheme-->
 <!-- set it to 0 to decide automatically-->
 <!-- set it to -1 to not close indexes early-->
