@@ -18,19 +18,20 @@ public class MultiIndexer extends BaseIndexer {
   IndexWriter InterimWriter = null;
   long InterimCloseThreshhold = 0;
   Random Rand = new Random();
-
+  
   MultiIndexer(IndexWriter mainIndexWriter, BufferedReader wikiReader, ArrayList<InputFileRec> listOfFilesToIndex) throws IOException {
     super(mainIndexWriter, wikiReader, listOfFilesToIndex);
   }
   
   long GetNewCloseThreshhold() {
     int minVal = (int) IndexConfig.Parsed.INDEX_CLOSE_THRESHHOLD / 2;
-    long newThreshhold = Rand.nextInt(minVal) + minVal; 
+    long newThreshhold = Rand.nextInt(minVal) + minVal;
     Log.info("[" + Thread.currentThread().getId() + "]  New close threshhold: " + newThreshhold);
     return newThreshhold;
   }
-
+  
   int TempIndexCounter = 700;
+  
   protected IndexWriter MakeFileSystemBasedIndexWriter() throws CorruptIndexException, LockObtainFailedException, IOException {
     String tempOutDir = IndexConfig.Parsed.OUTPUT_DIR_TEMP + "\\index-" + Thread.currentThread().getId() + "-" + TempIndexCounter++;
     return MakeIndexWriter(FSDirectory.open(new File(tempOutDir)));
@@ -47,8 +48,7 @@ public class MultiIndexer extends BaseIndexer {
     if (InterimWriter == null) {
       InterimWriter = MakeInterimWriter();
       InterimCloseThreshhold = GetNewCloseThreshhold();
-    }
-    else {
+    } else {
       if (InterimBytesIndexed > InterimCloseThreshhold) {
         InterimCloseThreshhold = GetNewCloseThreshhold();
         InterimBytesIndexed = 0;
@@ -59,7 +59,7 @@ public class MultiIndexer extends BaseIndexer {
   }
   
   public void AddDocument(Document doc) throws CorruptIndexException, IOException {
-    InterimWriter.addDocument(doc);    
+    InterimWriter.addDocument(doc);
   }
   
   protected void CloseInterimWriter() throws CorruptIndexException, IOException {

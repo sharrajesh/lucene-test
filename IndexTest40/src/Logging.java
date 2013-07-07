@@ -1,4 +1,3 @@
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ch.qos.logback.classic.LoggerContext;
@@ -16,15 +15,14 @@ public class Logging {
     try {
       configurator.doConfigure(path);
       configured = true;
-    }
-    catch (JoranException e) {
+    } catch (JoranException e) {
       e.printStackTrace();
     }
     return configured;
   }
   
   private static boolean ConfigureUsingFiles(JoranConfigurator configurator) {
-    String configs[] = {"logback.xml", "conf\\logback.xml"};
+    String configs[] = { "logback.xml", "conf\\logback.xml" };
     for (String config : configs) {
       if (IndexConfig.FileExists(config) && ConfigureUsingFile(configurator, config))
         return true;

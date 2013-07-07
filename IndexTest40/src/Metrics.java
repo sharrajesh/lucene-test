@@ -16,11 +16,11 @@ import org.slf4j.LoggerFactory;
 public class Metrics {
   private static Logger Log = LoggerFactory.getLogger(Metrics.class);
   
-	public static StopWatch Watch = new StopWatch();
-	public static AtomicLong TotalDocsIndexed = new AtomicLong(0);
-	public static AtomicLong TotalBytesIndexed = new AtomicLong(0);
-
- public int Dump(String indexDir) {
+  public static StopWatch Watch = new StopWatch();
+  public static AtomicLong TotalDocsIndexed = new AtomicLong(0);
+  public static AtomicLong TotalBytesIndexed = new AtomicLong(0);
+  
+  public int Dump(String indexDir) {
     int ret = -1;
     Watch.Reset();
     Watch.Start();
@@ -34,7 +34,7 @@ public class Metrics {
       
       Watch.Reset();
       Watch.Start();
-
+      
       long totalTermsWithDuplicates = 0;
       long totalTermsWithoutDuplicates = 0;
       
@@ -48,8 +48,8 @@ public class Metrics {
         long totalTermsWithoutDuplicatesForField = 0;
         TermsEnum termsEnum = terms.iterator(null);
         while (termsEnum.next() != null)
-        	totalTermsWithoutDuplicatesForField++;
-        	
+          totalTermsWithoutDuplicatesForField++;
+        
         Log.info("Total terms without duplicates for '" + field + "': " + totalTermsWithoutDuplicatesForField);
         totalTermsWithoutDuplicates += totalTermsWithoutDuplicatesForField;
       }
@@ -61,15 +61,14 @@ public class Metrics {
       
       reader.close();
       ret = 0;
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       Log.error("Exception ", e);
     }
     return ret;
   }
-
-	static String GigsPerHour(long bytesIndexed, long miliSecsElapsed) {
-	  double rateInst = (bytesIndexed * IndexConfig.GIGA_PER_HOUR_FACTOR)/miliSecsElapsed;
-	  return new DecimalFormat("####.####").format(rateInst);
-	}
+  
+  static String GigsPerHour(long bytesIndexed, long miliSecsElapsed) {
+    double rateInst = (bytesIndexed * IndexConfig.GIGA_PER_HOUR_FACTOR) / miliSecsElapsed;
+    return new DecimalFormat("####.####").format(rateInst);
+  }
 }

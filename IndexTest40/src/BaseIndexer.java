@@ -30,21 +30,21 @@ public class BaseIndexer implements Runnable {
     String Date;
     String Body;
   };
-
+  
   static public class InputFileRec {
-	  public File FileHandle;
-	  public long FileSize;
-	
-	  public InputFileRec(File f, long s) {
-	    FileHandle = f;
-	    FileSize = s;
-	  }
-	}
-
+    public File FileHandle;
+    public long FileSize;
+    
+    public InputFileRec(File f, long s) {
+      FileHandle = f;
+      FileSize = s;
+    }
+  }
+  
   ArrayList<InputFileRec> ListOfFilesToIndex;
   BufferedReader WikiReader;
   WikiLineDataRec TempDataRec = new WikiLineDataRec();
-
+  
   IndexWriter MainIndexWriter;
   
   BaseIndexer(IndexWriter mainIndexWriter, BufferedReader wikiReader, ArrayList<InputFileRec> listOfFilesToIndex) throws IOException {
@@ -57,18 +57,18 @@ public class BaseIndexer implements Runnable {
   private FieldType IndexableFieldType;
   
   void CreateIndexableFieldType() {
-  	IndexableFieldType = new FieldType();
+    IndexableFieldType = new FieldType();
     
-  	IndexableFieldType.setStoreTermVectors(true);
-  	IndexableFieldType.setStoreTermVectorPositions(true);
-  	IndexableFieldType.setStoreTermVectorPayloads(true);
+    IndexableFieldType.setStoreTermVectors(true);
+    IndexableFieldType.setStoreTermVectorPositions(true);
+    IndexableFieldType.setStoreTermVectorPayloads(true);
     
-  	IndexableFieldType.setIndexed(true);
-  	IndexableFieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
+    IndexableFieldType.setIndexed(true);
+    IndexableFieldType.setIndexOptions(IndexOptions.DOCS_AND_FREQS);
     
-  	IndexableFieldType.setStored(true);    
+    IndexableFieldType.setStored(true);
   }
-
+  
   protected static IndexWriterConfig MakeIndexWriterConfig() throws IOException {
     IndexWriterConfig indexWriterConfig = new IndexWriterConfig(IndexConfig.LUCENE_VERSION, new StandardAnalyzer(IndexConfig.LUCENE_VERSION));
     if (IndexConfig.Parsed.RAM_BUFFER_SIZE_MB != 0)
@@ -77,29 +77,31 @@ public class BaseIndexer implements Runnable {
       indexWriterConfig.setMergePolicy(NoMergePolicy.NO_COMPOUND_FILES);
     return indexWriterConfig;
   }
-
+  
   protected static IndexWriter MakeIndexWriter(Directory outputDir) throws IOException {
     return new IndexWriter(outputDir, MakeIndexWriterConfig());
   }
-
-  public void Close() throws CorruptIndexException, IOException {}
-
-  public void OpenInterimWriter() throws CorruptIndexException, LockObtainFailedException, IOException {}
-
+  
+  public void Close() throws CorruptIndexException, IOException {
+  }
+  
+  public void OpenInterimWriter() throws CorruptIndexException, LockObtainFailedException, IOException {
+  }
+  
   void AddToMainIndex(Directory indexDir) throws CorruptIndexException, IOException {
     MainIndexWriter.addIndexes(indexDir);
   }
-
+  
   public void AddDocument(Document doc) throws CorruptIndexException, IOException {
     MainIndexWriter.addDocument(doc);
   }
-
+  
   private String GetNextLine() throws IOException {
     synchronized (WikiReader) {
       return WikiReader.readLine();
     }
   }
-
+  
   private InputFileRec GetNextFileRec() {
     synchronized (ListOfFilesToIndex) {
       Iterator<InputFileRec> itr = ListOfFilesToIndex.iterator();
@@ -107,12 +109,11 @@ public class BaseIndexer implements Runnable {
         InputFileRec fr = itr.next();
         itr.remove();
         return fr;
-      }
-      else
+      } else
         return null;
     }
   }
-
+  
   private boolean GetNextRec(WikiLineDataRec dataRec) throws IOException {
     String line;
     while ((line = GetNextLine()) != null) {
@@ -144,7 +145,7 @@ public class BaseIndexer implements Runnable {
       doc.add(new TextField("title", TempDataRec.Title, Field.Store.YES));
       doc.add(new TextField("date", TempDataRec.Date, Field.Store.YES));
       doc.add(new Field("body", TempDataRec.Body, IndexableFieldType));
-
+      
       UpdateStats(TempDataRec.Body.length());
     }
     return doc;
@@ -163,7 +164,7 @@ public class BaseIndexer implements Runnable {
     
     String body = FileUtils.readFileToString(file);
     doc.add(new Field("body", body, IndexableFieldType));
-    //doc.add(new Field("body", new FileReader(file), IndexableFieldType));
+    // doc.add(new Field("body", new FileReader(file), IndexableFieldType));
     
     BasicFileAttributes attributes = Files.readAttributes(Paths.get(file.getPath()), BasicFileAttributes.class);
     doc.add(new LongField("date", attributes.creationTime().toMillis(), Field.Store.YES));
@@ -185,22 +186,22 @@ public class BaseIndexer implements Runnable {
   long LocalDocsIndexed = 0;
   long LocalBytesIndexed = 0;
   long InterimBytesIndexed = 0;
-
+  
   private void BuildIndex() throws IOException {
     Document doc;
     while ((doc = GetNextDocument()) != null) {
       OpenInterimWriter();
-
+      
       AddDocsWatch.Start();
       AddDocument(doc);
       AddDocsWatch.Stop();
-
+      
       PrintStatusUpdate();
     }
     Close();
     PrintExitStatus();
   }
-
+  
   private void UpdateStats(long docSize) {
     LocalBytesIndexed += docSize;
     InterimBytesIndexed += docSize;
@@ -215,27 +216,26 @@ public class BaseIndexer implements Runnable {
       Runtime.getRuntime().gc();
       long totalBytesIndexed = Metrics.TotalBytesIndexed.get();
       long totalTimeElapsed = Metrics.Watch.GetElapsed();
-      Log.info("[" + Thread.currentThread().getId() + "]  Adding TotalDocs: " + Metrics.TotalDocsIndexed.get() + 
-          " LocalDocs: " + LocalDocsIndexed + " TotalBytes: " + totalBytesIndexed + " LocalBytes: " + LocalBytesIndexed + " TotalTimeElapsed: " + totalTimeElapsed);
-      Log.info("[" + Thread.currentThread().getId() + "]  GigsPerHour Thread Rate: " + 
-          Metrics.GigsPerHour(LocalBytesIndexed, AddDocsWatch.GetElapsed()) + " OverAll Rate: " + Metrics.GigsPerHour(totalBytesIndexed, totalTimeElapsed));
+      Log.info("[" + Thread.currentThread().getId() + "]  Adding TotalDocs: " + Metrics.TotalDocsIndexed.get() + " LocalDocs: " + LocalDocsIndexed
+          + " TotalBytes: " + totalBytesIndexed + " LocalBytes: " + LocalBytesIndexed + " TotalTimeElapsed: " + totalTimeElapsed);
+      Log.info("[" + Thread.currentThread().getId() + "]  GigsPerHour Thread Rate: " + Metrics.GigsPerHour(LocalBytesIndexed, AddDocsWatch.GetElapsed())
+          + " OverAll Rate: " + Metrics.GigsPerHour(totalBytesIndexed, totalTimeElapsed));
     }
   }
-
+  
   void PrintExitStatus() {
     long totalBytesIndexed = Metrics.TotalBytesIndexed.get();
     long totalTimeElapsed = Metrics.Watch.GetElapsed();
-    Log.info("[" + Thread.currentThread().getId() + "] TotalDocs: " + Metrics.TotalDocsIndexed.get() + 
-        " LocalDocs: " + LocalDocsIndexed + " TotalBytes: " + totalBytesIndexed + " LocalBytes: " + LocalBytesIndexed + " ExitingAfter: " + totalTimeElapsed + " millisecs");
+    Log.info("[" + Thread.currentThread().getId() + "] TotalDocs: " + Metrics.TotalDocsIndexed.get() + " LocalDocs: " + LocalDocsIndexed + " TotalBytes: "
+        + totalBytesIndexed + " LocalBytes: " + LocalBytesIndexed + " ExitingAfter: " + totalTimeElapsed + " millisecs");
     Log.info("[" + Thread.currentThread().getId() + "] GigsPerHour OverAll Rate: " + Metrics.GigsPerHour(totalBytesIndexed, totalTimeElapsed));
   }
-
+  
   @Override
   public void run() {
     try {
       BuildIndex();
-    }
-    catch (IOException e) {
+    } catch (IOException e) {
       Log.error("[" + Thread.currentThread().getId() + "]  exception happend after : " + Metrics.Watch.GetElapsed() + " millisecs");
       Log.error("Exception", e);
     }
