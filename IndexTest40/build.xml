@@ -5,29 +5,37 @@
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. --><project basedir="." default="build" name="IndexTest40">
     <property environment="env"/>
-    <property name="JAVA_DOWNLOADS" value="../../../work/java-downloads"/>
-    <property name="ECLIPSE_HOME" value="../../../../eclipse"/>
+    <property name="src.link" value="../../../cnorris/LuceneTest/IndexTest40/src"/>
+    <property name="JRE_LIB" value="C:/Program Files/Java/jdk1.7.0_25/jre/lib/rt.jar"/>
+    <property name="JAVA_DOWNLOAD" value="../../java-downloads"/>
+    <property name="ECLIPSE_HOME" value="C:/eclipse"/>
     <property name="debuglevel" value="source,lines,vars"/>
-    <property name="target" value="1.6"/>
-    <property name="source" value="1.6"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
     <path id="IndexTest40.classpath">
         <pathelement location="bin"/>
-        <pathelement location="../../../work/java-downloads/lucene-4.3.1-svn/build/core/lucene-core-4.3.1-SNAPSHOT.jar"/>
-        <pathelement location="../../../work/java-downloads/commons-configuration-1.9-bin/commons-configuration-1.9/commons-configuration-1.9.jar"/>
-        <pathelement location="../../../work/java-downloads/commons-io-2.4-bin/commons-io-2.4/commons-io-2.4.jar"/>
-        <pathelement location="../../../work/java-downloads/commons-logging-1.1.3-bin/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
-        <pathelement location="../../../work/java-downloads/lucene-4.3.1-svn/build/analysis/common/lucene-analyzers-common-4.3.1-SNAPSHOT.jar"/>
-        <pathelement location="../../../work/java-downloads/lucene-4.3.1-svn/build/queryparser/lucene-queryparser-4.3.1-SNAPSHOT.jar"/>
-        <pathelement location="../../../work/java-downloads/commons-lang-2.6-bin/commons-lang-2.6/commons-lang-2.6.jar"/>
-        <pathelement location="../../../work/java-downloads/slf4j-1.7.5/slf4j-1.7.5/slf4j-api-1.7.5.jar"/>
-        <pathelement location="../../../work/java-downloads/logback-1.0.13/logback-1.0.13/logback-classic-1.0.13.jar"/>
-        <pathelement location="../../../work/java-downloads/logback-1.0.13/logback-1.0.13/logback-core-1.0.13.jar"/>
-        <pathelement location="${JAVA_DOWNLOADS}"/>
+        <pathelement location="${JRE_LIB}"/>
+        <pathelement location="${JAVA_DOWNLOAD}/commons-io-2.4/commons-io-2.4.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/commons-configuration-1.9/commons-configuration-1.9.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/commons-lang-2.6/commons-lang-2.6.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/commons-logging-1.1.3/commons-logging-1.1.3.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/logback-1.0.13/logback-core-1.0.13.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/logback-1.0.13/logback-classic-1.0.13.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/lucene-4.3.1-svn/build/analysis/common/lucene-analyzers-common-4.3.1-SNAPSHOT.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/lucene-4.3.1-svn/build/core/lucene-core-4.3.1-SNAPSHOT.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/lucene-4.3.1-svn/build/queryparser/lucene-queryparser-4.3.1-SNAPSHOT.jar"/>
+        <pathelement location="${JAVA_DOWNLOAD}/slf4j-1.7.5/slf4j-api-1.7.5.jar"/>
     </path>
+    <path id="run.IndexTest40.classpath">
+        <pathelement location="${JRE_LIB}"/>
+        <path refid="IndexTest40.classpath"/>
+    </path>
+    <path id="run.IndexTest40.bootclasspath"/>
     <target name="init">
         <mkdir dir="bin"/>
         <copy includeemptydirs="false" todir="bin">
-            <fileset dir="src">
+            <fileset dir="${src.link}">
+                <exclude name="**/*.launch"/>
                 <exclude name="**/*.java"/>
             </fileset>
         </copy>
@@ -41,7 +49,7 @@
     <target depends="init" name="build-project">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
+            <src path="${src.link}"/>
             <classpath refid="IndexTest40.classpath"/>
         </javac>
     </target>
@@ -58,5 +66,14 @@
     <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
         <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
         <antcall target="build"/>
+    </target>
+    <target name="IndexTest40">
+        <java classname="IndexMain" dir="../../../cnorris/LuceneTest/IndexTest40" failonerror="true" fork="yes">
+            <arg line="index"/>
+            <classpath refid="run.IndexTest40.classpath"/>
+            <bootclasspath>
+                <path refid="run.IndexTest40.bootclasspath"/>
+            </bootclasspath>
+        </java>
     </target>
 </project>
