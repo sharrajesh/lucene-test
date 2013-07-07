@@ -1,0 +1,4 @@
+*.classpath
+/IndexTest40/IndexTest40.jar
+/IndexTest40/bin/*.class
+/IndexTest40/*.project
