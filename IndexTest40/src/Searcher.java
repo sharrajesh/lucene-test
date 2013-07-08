@@ -2,15 +2,15 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.DirectoryReader;
-import org.apache.lucene.index.DocsAndPositionsEnum;
+//import org.apache.lucene.index.DocsAndPositionsEnum;
 import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.index.Terms;
-import org.apache.lucene.index.TermsEnum;
+//import org.apache.lucene.index.Terms;
+//import org.apache.lucene.index.TermsEnum;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.search.*;
-import org.apache.lucene.util.BytesRef;
+//import org.apache.lucene.util.BytesRef;
 import org.apache.lucene.queryparser.classic.ParseException;
 
 //import org.apache.lucene.index.DocsAndPositionsEnum;
@@ -54,7 +54,7 @@ public class Searcher {
       int totalIndex = 0;
       ScoreDoc[] hits = collector.topDocs().scoreDocs;
       
-      BytesRef queryTermString = new BytesRef(queryString);
+//      BytesRef queryTermString = new BytesRef(queryString);
       
       while (hits.length > 0) {
         for (int i = 0; i < hits.length; ++i) {

@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.lucene.index.DirectoryReader;
@@ -54,10 +53,10 @@ public class Metrics {
         totalTermsWithoutDuplicates += totalTermsWithoutDuplicatesForField;
       }
       
-      Log.info("\nTotal number of documents: " + reader.numDocs());
-      Log.info("Total terms with duplicates: " + totalTermsWithDuplicates);
-      Log.info("Total terms without duplicates: " + totalTermsWithoutDuplicates);
-      Log.info("Total calculation took: " + Metrics.Watch.GetElapsed() + " millisecs");
+      Log.info("\nTotal number of documents: " + ThreadSafeFormatter.Format(reader.numDocs()));
+      Log.info("Total terms with duplicates: " + ThreadSafeFormatter.Format(totalTermsWithDuplicates));
+      Log.info("Total terms without duplicates: " + ThreadSafeFormatter.Format(totalTermsWithoutDuplicates));
+      Log.info("Total calculation took: " + ThreadSafeFormatter.Format(Metrics.Watch.GetElapsed()) + " millisecs");
       
       reader.close();
       ret = 0;
@@ -69,6 +68,6 @@ public class Metrics {
   
   static String GigsPerHour(long bytesIndexed, long miliSecsElapsed) {
     double rateInst = (bytesIndexed * IndexConfig.GIGA_PER_HOUR_FACTOR) / miliSecsElapsed;
-    return new DecimalFormat("####.####").format(rateInst);
+    return ThreadSafeFormatter.Format(rateInst);
   }
 }

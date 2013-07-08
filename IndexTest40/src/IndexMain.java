@@ -119,17 +119,19 @@ public class IndexMain {
     }
     
     Log.info("************************");
-    Log.info("Until closing took: " + Metrics.Watch.GetElapsed() + " millisecs");
-    Log.info(mainIndexWriter.numDocs() + " documents were added.");
+    Log.info("Until closing took: " + ThreadSafeFormatter.Format(Metrics.Watch.GetElapsed()) + " millisecs");
+    Log.info(ThreadSafeFormatter.Format(mainIndexWriter.numDocs()) + " documents were added.");
     
     long startClosingTime = Metrics.Watch.GetElapsed();
     mainIndexWriter.close();
-    Log.info("Final closing took: " + (Metrics.Watch.GetElapsed() - startClosingTime) + " millisecs");
+    long finalClosingTime = Metrics.Watch.GetElapsed() - startClosingTime;
+    Log.info("Final closing took: " + ThreadSafeFormatter.Format(finalClosingTime) + " millisecs");
     
     Metrics.Watch.Stop();
     
-    long totalTime = Metrics.Watch.GetElapsed();
-    Log.info("Total indexing took: " + totalTime + " millisecs" + " GigsPerHour OverAll Rate: "
-        + Metrics.GigsPerHour(Metrics.TotalBytesIndexed.get(), totalTime));
+    long totalBytesIndexed = Metrics.TotalBytesIndexed.get();
+    long totalIndexingTime = Metrics.Watch.GetElapsed();
+    Log.info("Total indexing took: " + ThreadSafeFormatter.Format(totalIndexingTime) + " millisecs " 
+        + "GigsPerHour OverAll Rate: " + Metrics.GigsPerHour(totalBytesIndexed, totalIndexingTime));
   }
 }
